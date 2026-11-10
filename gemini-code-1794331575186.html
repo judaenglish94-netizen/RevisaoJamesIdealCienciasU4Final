@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz de Ciências - Solo, Agricultura e Alimentação</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --space-blue: #0284c7;
+      --space-light: #38bdf8;
+      --text-main: #f8f9fa;
+      --text-secondary: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Nunito', sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Efeito de estrelas sutis */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.5;
+      background-image:
+        radial-gradient(2px 2px at 12% 18%, #ffffff, transparent),
+        radial-gradient(1.5px 1.5px at 28% 72%, #ffffff, transparent),
+        radial-gradient(2px 2px at 45% 25%, #ffffff, transparent),
+        radial-gradient(1px 1px at 62% 84%, #ffffff, transparent),
+        radial-gradient(2px 2px at 78% 15%, #ffffff, transparent),
+        radial-gradient(1.5px 1.5px at 88% 58%, #ffffff, transparent),
+        radial-gradient(1px 1px at 18% 48%, #ffffff, transparent),
+        radial-gradient(2px 2px at 54% 62%, #ffffff, transparent),
+        radial-gradient(1.5px 1.5px at 92% 30%, #ffffff, transparent),
+        radial-gradient(1px 1px at 36% 90%, #ffffff, transparent);
+      z-index: 0;
+    }
+
+    h1, h2, h3, .font-title {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    /* Logo no Topo */
+    .top-logo {
+      position: relative;
+      z-index: 1;
+      max-width: 202px;
+      width: 100%;
+      height: auto;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 6px 15px rgba(0, 0, 0, 0.7));
+      -webkit-mask-image: radial-gradient(ellipse at center, black 48%, transparent 74%);
+      mask-image: radial-gradient(ellipse at center, black 48%, transparent 74%);
+    }
+
+    /* Container Principal */
+    .main-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 750px;
+      height: 76vh;
+      min-height: 480px;
+      background: rgba(13, 27, 42, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 3px solid rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      padding: 24px 28px;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Barra de rolagem interna customizada */
+    .main-card::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .main-card::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 10px;
+    }
+
+    .main-card::-webkit-scrollbar-thumb {
+      background: #0284c7;
+      border-radius: 10px;
+    }
+
+    .main-card::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+
+    .option-btn {
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: #38bdf8;
+      background-color: rgba(2, 132, 199, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo no Topo -->
+  <img src="judalogo.png" alt="Logo Judá" class="top-logo" />
+
+  <!-- Container Principal -->
+  <main class="main-card flex flex-col justify-between">
+    <!-- Cabeçalho -->
+    <header class="border-b border-slate-700/80 pb-3 mb-3 flex flex-wrap items-center justify-between gap-2">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold text-[#38bdf8] tracking-wide">
+          Quiz de Ciências
+        </h1>
+        <p class="text-xs sm:text-sm text-[#94a3b8]">
+          Solo, Agricultura, Plantas e Hábitos Saudáveis
+        </p>
+      </div>
+      <div id="quiz-badges" class="hidden flex items-center gap-3">
+        <span id="progress-badge" class="px-3 py-1 text-xs sm:text-sm font-bold rounded-full bg-[#0284c7]/30 border border-[#38bdf8] text-[#f8f9fa]">
+          Questão 1 / 30
+        </span>
+        <span id="score-badge" class="px-3 py-1 text-xs sm:text-sm font-bold rounded-full bg-slate-800 border border-white/40 text-[#38bdf8]">
+          Nota: 0.0 / 10
+        </span>
+      </div>
+    </header>
+
+    <!-- Página Inicial: Resumo por Tópicos -->
+    <section id="intro-screen" class="flex-1 flex flex-col justify-between gap-4">
+      <div class="space-y-3 text-sm sm:text-base">
+        <p class="text-[#94a3b8]">
+          Revise os pontos principais antes de começar o simulado (30 questões — vale 10,0 pontos):
+        </p>
+
+        <div class="bg-slate-900/70 border border-[#38bdf8]/40 rounded-2xl p-3.5 space-y-1.5">
+          <h2 class="text-base sm:text-lg font-bold text-[#38bdf8]">1. O Solo e a Agricultura</h2>
+          <p class="text-sm text-[#f8f9fa]">
+            • <strong class="text-[#38bdf8]">Solo fértil:</strong> fornece <strong>água</strong> e <strong>sais minerais</strong> absorvidos pelas <strong>raízes</strong>, além de dar <strong>suporte físico</strong> às plantas.
+          </p>
+          <p class="text-sm text-[#f8f9fa]">
+            • <strong class="text-[#38bdf8]">Matéria orgânica:</strong> restos de plantas e animais que retêm água/nutrientes e alimentam <strong>microrganismos</strong> na <strong>reciclagem de nutrientes</strong>.
+          </p>
+        </div>
+
+        <div class="bg-slate-900/70 border border-[#38bdf8]/40 rounded-2xl p-3.5 space-y-1.5">
+          <h2 class="text-base sm:text-lg font-bold text-[#38bdf8]">2. Cuidados com o Solo e Agricultura Orgânica</h2>
+          <p class="text-sm text-[#f8f9fa]">
+            • <strong class="text-[#38bdf8]">Importância:</strong> garante <strong>segurança alimentar</strong> (armazenamento) e gera empregos na economia.
+          </p>
+          <p class="text-sm text-[#f8f9fa]">
+            • <strong class="text-[#38bdf8]">Técnicas:</strong> <strong>cobertura do solo</strong> (palha/folhas contra erosão), <strong>irrigação</strong> (<strong>aspersão</strong>, <strong>gotejamento</strong> e <strong>superfície</strong>), <strong>rotação de culturas</strong> (quebra o ciclo de pragas), <strong>adubação verde</strong> e <strong>controle natural</strong> (ex.: <strong>joaninhas</strong> contra <strong>pulgões</strong>).
+          </p>
+          <p class="text-sm text-[#f8f9fa]">
+            • <strong class="text-[#38bdf8]">Agricultura orgânica:</strong> une essas práticas <strong>sem pesticidas ou agrotóxicos</strong>.
+          </p>
+        </div>
+
+        <div class="bg-slate-900/70 border border-[#38bdf8]/40 rounded-2xl p-3.5 space-y-1.5">
+          <h2 class="text-base sm:text-lg font-bold text-[#38bdf8]">3. Partes das Plantas e Fruta × Fruto</h2>
+          <p class="text-sm text-[#f8f9fa]">
+            • <strong class="text-[#38bdf8]">Partes comestíveis:</strong> <strong>Raízes</strong> (cenoura, beterraba — vitaminas/fibras), <strong>Caules</strong> (palmito, batata-inglesa), <strong>Folhas</strong> (alface, espinafre — vitaminas/minerais), <strong>Frutos</strong> (tomate, abóbora — contêm sementes) e <strong>Sementes</strong> (feijão, arroz — proteínas/fibras).
+          </p>
+          <p class="text-sm text-[#f8f9fa]">
+            • <strong class="text-[#38bdf8]">Fruto × Fruta:</strong> <strong>Fruto</strong> é o termo científico (cresce do <strong>ovário</strong> da flor e protege as <strong>sementes</strong>); <strong>fruta</strong> é o termo popular para frutos doces ou azedos.
+          </p>
+        </div>
+
+        <div class="bg-slate-900/70 border border-[#38bdf8]/40 rounded-2xl p-3.5 space-y-1.5">
+          <h2 class="text-base sm:text-lg font-bold text-[#38bdf8]">4. Hábitos Alimentares Saudáveis</h2>
+          <p class="text-sm text-[#f8f9fa]">
+            • <strong class="text-[#38bdf8]">Rotina:</strong> <strong>variedade alimentar</strong>, <strong>5 a 6 refeições/dia</strong> em horários regulares e evitar excesso de <strong>gorduras saturadas</strong> e <strong>sódio</strong>.
+          </p>
+          <p class="text-sm text-[#f8f9fa]">
+            • <strong class="text-[#38bdf8]">Folha de revisão:</strong> <strong>mastigar adequadamente</strong> facilita a <strong>digestão</strong> e aumenta a <strong>saciedade</strong>; <strong>beber água</strong> regula a <strong>temperatura corporal</strong> e ajuda na <strong>eliminação de toxinas</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-2 flex justify-center">
+        <button id="start-btn" class="px-8 py-3 rounded-full font-bold text-base bg-[#0284c7] hover:bg-[#38bdf8] text-white border-2 border-white transition cursor-pointer shadow-lg">
+          Iniciar quiz →
+        </button>
+      </div>
+    </section>
+
+    <!-- Menu de Navegação das Questões -->
+    <nav id="question-nav" class="hidden flex flex-wrap items-center justify-center gap-1.5 mb-4 pb-3 border-b border-slate-700/60" aria-label="Navegação das questões"></nav>
+
+    <!-- Área Dinâmica da Questão -->
+    <section id="quiz-container" class="hidden flex-1 flex flex-col justify-between gap-4">
+      <div id="question-area" class="space-y-4"></div>
+
+      <!-- Feedback -->
+      <div id="feedback-box" class="hidden rounded-2xl p-4 border text-sm sm:text-base leading-relaxed"></div>
+
+      <!-- Controles: Previous, Check, Next -->
+      <div class="pt-2 flex flex-wrap items-center justify-between gap-3">
+        <button id="prev-btn" class="px-5 py-2.5 rounded-full font-bold bg-slate-800 hover:bg-slate-700 text-white border-2 border-white/60 transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+          ← Previous
+        </button>
+
+        <button id="check-btn" class="px-6 py-2.5 rounded-full font-bold bg-[#0284c7] hover:bg-[#38bdf8] text-white border-2 border-white/80 transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+          Check
+        </button>
+
+        <button id="next-btn" class="px-6 py-2.5 rounded-full font-bold bg-[#0284c7] hover:bg-[#38bdf8] text-white border-2 border-white/80 transition cursor-pointer">
+          Next →
+        </button>
+      </div>
+    </section>
+
+    <!-- Tela Final -->
+    <section id="result-screen" class="hidden flex-1 flex flex-col items-center justify-center text-center gap-5 py-6">
+      <h2 class="text-3xl font-bold text-[#38bdf8]">Simulado Concluído!</h2>
+      <div class="bg-slate-900/80 border-2 border-[#38bdf8] rounded-2xl px-8 py-5">
+        <p class="text-xs uppercase tracking-wider text-[#94a3b8] mb-1">Nota Final</p>
+        <p id="final-score-text" class="text-3xl sm:text-4xl font-bold text-[#f8f9fa]"></p>
+      </div>
+      <p id="final-message" class="text-sm sm:text-base text-[#94a3b8] max-w-md"></p>
+      <button id="restart-btn" class="px-8 py-3 rounded-full font-bold bg-[#0284c7] hover:bg-[#38bdf8] text-white border-2 border-white transition cursor-pointer">
+        Refazer Quiz
+      </button>
+    </section>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        question: "1. Um agricultor percebeu que sua plantação de verduras cresceu muito bem neste ano. Ao analisar o terreno, ele concluiu que possuía um solo fértil. De acordo com o livro, o que define um solo fértil?",
+        options: [
+          "a. Um solo que possui apenas areia e pedras para facilitar a passagem de ar.",
+          "b. Um solo que impede a entrada de água para não afogar as raízes.",
+          "c. Um solo que fornece elementos essenciais para o crescimento dos vegetais, como água e sais minerais em quantidades adequadas.",
+          "d. Um solo totalmente livre de microrganismos e restos de plantas.",
+          "e. Um solo artificial produzido em laboratório sem necessidade de nutrientes."
+        ],
+        correct: 2,
+        feedback: "Correto! Letra <strong>c</strong>. Um solo fértil é aquele que fornece elementos essenciais para o crescimento dos vegetais, como água e sais minerais em quantidades adequadas, absorvidos pelas raízes."
+      },
+      {
+        question: "2. Em uma aula de ciências, os alunos observaram folhas secas e restos de animais misturados à terra de um jardim. O professor explicou que essa matéria orgânica é fundamental para a fertilidade do solo porque:",
+        options: [
+          "a. melhora a estrutura do solo, aumenta a retenção de água e nutrientes e alimenta microrganismos.",
+          "b. impede que as raízes das plantas penetrem profundamente no terreno.",
+          "c. transforma os sais minerais em gases tóxicos que afastam qualquer ser vivo.",
+          "d. substitui completamente a necessidade de luz solar para as plantas.",
+          "e. deixa o solo seco e duro, evitando o crescimento de vegetais."
+        ],
+        correct: 0,
+        feedback: "Correto! Letra <strong>a</strong>. A matéria orgânica melhora a estrutura do solo, aumenta sua capacidade de retenção de água e de nutrientes e alimenta microrganismos que fazem a reciclagem de nutrientes."
+      },
+      {
+        question: "3. No esquema de reciclagem de nutrientes apresentado no livro, animais mortos e partes de plantas caem no solo. Qual é o próximo passo desse ciclo natural para que as plantas voltem a crescer?",
+        options: [
+          "a. O vento leva todo o material para os rios antes que ele toque a terra.",
+          "b. As folhas das árvores absorvem diretamente os animais mortos sem ajuda do solo.",
+          "c. A água da chuva congela a matéria orgânica para preservá-la intacta.",
+          "d. As raízes expulsam a água e o ar para fora do solo.",
+          "e. Microrganismos decompõem a matéria orgânica, liberando nutrientes no solo para serem absorvidos pelas raízes."
+        ],
+        correct: 4,
+        feedback: "Correto! Letra <strong>e</strong>. Os microrganismos decompõem a matéria orgânica, liberando nutrientes no solo que são absorvidos pelas raízes das plantas para que elas cresçam."
+      },
+      {
+        question: "4. Além de nutrir as plantas com água e sais minerais, o solo desempenha outro papel indispensável para que uma árvore não caia com o vento. Qual é essa função?",
+        options: [
+          "a. Produzir açúcares nas folhas através da fotossíntese.",
+          "b. Servir de suporte físico, permitindo que as plantas se fixem e cresçam de modo estável.",
+          "c. Transformar o gás carbônico em oxigênio durante a noite.",
+          "d. Impedir que a água penetre nas camadas mais profundas.",
+          "e. Atrair insetos polinizadores para as flores."
+        ],
+        correct: 1,
+        feedback: "Correto! Letra <strong>b</strong>. Além de nutrir as plantas, o solo serve de suporte físico, permitindo que elas se fixem e cresçam de modo estável."
+      },
+      {
+        question: "5. A produção de frutas, legumes, verduras e hortaliças depende de uma relação equilibrada na natureza. Segundo o livro, essa produção variada de alimentos é resultado da interação complexa entre:",
+        options: [
+          "a. apenas a água da chuva e os fertilizantes químicos.",
+          "b. o vento, as pedras e os animais de grande porte.",
+          "c. somente as sementes e a luz artificial.",
+          "d. solo, plantas e microrganismos.",
+          "e. máquinas agrícolas e silos de armazenamento."
+        ],
+        correct: 3,
+        feedback: "Correto! Letra <strong>d</strong>. A interação complexa entre solo, plantas e microrganismos é fundamental para a produção de uma ampla variedade de alimentos."
+      },
+      {
+        question: "6. Ao longo da história, a agricultura foi decisiva para o desenvolvimento das civilizações humanas. Uma das grandes vantagens trazidas pelo cultivo em grande quantidade foi:",
+        options: [
+          "a. permitir o armazenamento de alimentos, garantindo o sustento durante períodos de escassez.",
+          "b. eliminar a necessidade de água para a sobrevivência humana.",
+          "c. fazer com que todas as pessoas deixassem de trabalhar no campo.",
+          "d. impedir a formação de comunidades e cidades.",
+          "e. reduzir a variedade de alimentos disponíveis para a população."
+        ],
+        correct: 0,
+        feedback: "Correto! Letra <strong>a</strong>. A produção em grande quantidade permitiu o armazenamento de alimentos, garantindo o sustento durante períodos de escassez e trazendo segurança alimentar."
+      },
+      {
+        question: "7. Além de garantir segurança alimentar, a agricultura tem um papel crucial na economia e no desenvolvimento rural. Por que isso acontece?",
+        options: [
+          "a. Porque os alimentos são produzidos automaticamente sem participação humana.",
+          "b. Porque ela substitui todas as outras atividades econômicas das cidades.",
+          "c. Porque envolve diversas etapas, desde o plantio até a distribuição dos produtos, gerando muitos empregos.",
+          "d. Porque impede o comércio entre diferentes regiões.",
+          "e. Porque reduz a necessidade de mão de obra no campo."
+        ],
+        correct: 2,
+        feedback: "Correto! Letra <strong>c</strong>. A agricultura gera empregos e impulsiona o desenvolvimento rural graças às diversas etapas envolvidas, desde o plantio até a distribuição dos produtos."
+      },
+      {
+        question: "8. Para proteger a superfície do terreno contra ventos fortes e chuvas intensas, um produtor espalhou palha e folhas secas sobre a terra. Essa técnica de cuidado com o solo é chamada de:",
+        options: [
+          "a. irrigação por gotejamento.",
+          "b. rotação de culturas.",
+          "c. adubação química.",
+          "d. controle biológico.",
+          "e. cobertura do solo."
+        ],
+        correct: 4,
+        feedback: "Correto! Letra <strong>e</strong>. A cobertura do solo protege sua superfície com materiais orgânicos (palha, folhas ou plantas de cobertura), reduzindo a perda de solo, conservando a água e inibindo plantas indesejadas."
+      },
+      {
+        question: "9. Uma fazenda localizada em uma região com poucas chuvas precisa garantir que suas plantas recebam água na medida certa. Para otimizar o uso da água em diferentes cultivos, o agricultor pode utilizar a técnica de irrigação por:",
+        options: [
+          "a. rotação, cobertura ou adubação.",
+          "b. aspersão, gotejamento ou superfície.",
+          "c. decomposição, polinização ou escassez.",
+          "d. ventilação, filtragem ou evaporação.",
+          "e. compactação, aragem ou queimada."
+        ],
+        correct: 1,
+        feedback: "Correto! Letra <strong>b</strong>. Segundo o livro, alguns tipos de irrigação ocorrem por aspersão, gotejamento e superfície, cada um com características para otimizar o uso da água."
+      },
+      {
+        question: "10. Um agricultor plantou milho em uma área durante uma estação e, na estação seguinte, decidiu plantar feijão no mesmo local. Essa prática de alternar diferentes vegetais na mesma área ao longo do tempo serve para:",
+        options: [
+          "a. aumentar a quantidade de pragas específicas na plantação.",
+          "b. gastar mais água do que o normal durante a irrigação.",
+          "c. impedir que os microrganismos vivam no solo.",
+          "d. interromper os ciclos de vida de pragas e doenças específicas e melhorar a fertilidade do solo.",
+          "e. deixar o solo sem nenhuma cobertura vegetal por vários anos."
+        ],
+        correct: 3,
+        feedback: "Correto! Letra <strong>d</strong>. A rotação de culturas alterna diferentes vegetais na mesma área ao longo do tempo, interrompendo ciclos de pragas e doenças e melhorando a fertilidade do solo."
+      },
+      {
+        question: "11. Em vez de aplicar venenos químicos em sua horta infestada por pulgões, Mariana resolveu soltar joaninhas entre as plantas. Esse método natural de controle de pragas funciona porque as joaninhas:",
+        options: [
+          "a. comem as folhas doentes para limpar a plantação.",
+          "b. produzem um cheiro forte que afasta a chuva.",
+          "c. são predadores naturais que se alimentam dos pulgões, reduzindo o uso de pesticidas.",
+          "d. transformam os pulgões em adubo verde.",
+          "e. cobrem o solo com suas asas para evitar a erosão."
+        ],
+        correct: 2,
+        feedback: "Correto! Letra <strong>c</strong>. As joaninhas são predadores que se alimentam de pulgões (praga que prejudica as plantações), ajudando a eliminar ou reduzir o uso de pesticidas."
+      },
+      {
+        question: "12. Para recuperar um terreno cansado, um técnico agrícola recomendou o cultivo de certas plantas para depois incorporá-las diretamente ao solo. Essa prática, chamada de adubação verde, tem como objetivo:",
+        options: [
+          "a. melhorar a qualidade do solo, aumentar a retenção de água e adicionar nutrientes essenciais.",
+          "b. eliminar todos os microrganismos presentes na terra.",
+          "c. substituir a irrigação por aspersão nas grandes fazendas.",
+          "d. secar o solo para facilitar o uso de máquinas pesadas.",
+          "e. impedir o crescimento de raízes no terreno."
+        ],
+        correct: 0,
+        feedback: "Correto! Letra <strong>a</strong>. A adubação verde envolve o cultivo de plantas (adubos verdes) para incorporá-las ao solo, melhorando sua qualidade, aumentando a retenção de água e adicionando nutrientes essenciais."
+      },
+      {
+        question: "13. Ao visitar uma feira de produtos naturais, Lucas leu que os alimentos daquela barraca vinham da agricultura orgânica. O que diferencia esse tipo de plantio da agricultura convencional?",
+        options: [
+          "a. O uso intenso de agrotóxicos para acelerar o crescimento.",
+          "b. A utilização de técnicas como rotação de culturas, adubação verde e métodos naturais, sem pesticidas ou agrotóxicos.",
+          "c. A proibição do uso de água na irrigação das plantas.",
+          "d. O cultivo feito apenas em estufas de plástico sem contato com o solo.",
+          "e. A retirada de toda a matéria orgânica antes do plantio."
+        ],
+        correct: 1,
+        feedback: "Correto! Letra <strong>b</strong>. A agricultura orgânica utiliza rotação de culturas, adubação verde e métodos naturais de controle de pragas, sem usar pesticidas ou agrotóxicos."
+      },
+      {
+        question: "14. Se um agricultor precisar escolher entre usar agrotóxicos ou métodos naturais para controlar pragas em sua plantação, qual seria o impacto positivo de escolher os métodos naturais?",
+        options: [
+          "a. Aumentaria a contaminação da água e do solo.",
+          "b. Eliminaria todos os insetos benéficos da região.",
+          "c. Reduziria a fertilidade do solo a longo prazo.",
+          "d. Tornaria os alimentos impróprios para o consumo humano.",
+          "e. Protegeria a saúde do solo, da comunidade e do ambiente, evitando substâncias tóxicas."
+        ],
+        correct: 4,
+        feedback: "Correto! Letra <strong>e</strong>. Os métodos naturais eliminam organismos nocivos sem contaminar o solo, os alimentos e o ambiente com pesticidas ou agrotóxicos."
+      },
+      {
+        question: "15. Ao preparar uma salada colorida, Pedro usou cenoura e beterraba raladas. De acordo com o livro, que parte da planta ele utilizou e quais nutrientes elas oferecem?",
+        options: [
+          "a. Caules comestíveis, ricos apenas em gorduras.",
+          "b. Folhas comestíveis, ricas em proteínas.",
+          "c. Sementes comestíveis, ricas em açúcares.",
+          "d. Raízes comestíveis, ricas em vitaminas, minerais e fibras.",
+          "e. Frutos comestíveis, ricos apenas em água."
+        ],
+        correct: 3,
+        feedback: "Correto! Letra <strong>d</strong>. Cenoura, beterraba e batata-doce são exemplos de raízes comestíveis, ricas em vitaminas, minerais e fibras."
+      },
+      {
+        question: "16. Muitas pessoas acham que toda parte da planta que cresce debaixo da terra é raiz, mas o livro mostra que há exceções. Qual dos grupos abaixo traz apenas exemplos de caules que fazem parte da nossa alimentação?",
+        options: [
+          "a. Palmito, aspargo e batata-inglesa.",
+          "b. Alface, espinafre e rúcula.",
+          "c. Cenoura, beterraba e batata-doce.",
+          "d. Feijão, lentilha e grão-de-bico.",
+          "e. Tomate, abóbora e pepino."
+        ],
+        correct: 0,
+        feedback: "Correto! Letra <strong>a</strong>. Palmito, aspargo e batata-inglesa são exemplos de caules comestíveis que fazem parte da nossa alimentação."
+      },
+      {
+        question: "17. Para deixar o almoço mais nutritivo, dona Clara preparou um refogado de espinafre e couve acompanhado de salada de alface e rúcula. Esses alimentos pertencem ao grupo das folhas comestíveis, que são ricas principalmente em:",
+        options: [
+          "a. gorduras saturadas e sódio.",
+          "b. açúcares simples e amido.",
+          "c. vitaminas e minerais.",
+          "d. proteínas animais.",
+          "e. óleos essenciais."
+        ],
+        correct: 2,
+        feedback: "Correto! Letra <strong>c</strong>. Alface, espinafre, couve e rúcula são exemplos de folhas comestíveis, ricas em vitaminas e minerais."
+      },
+      {
+        question: "18. Na cozinha, o tomate e o pepino costumam ser usados em saladas salgadas, mas, para a ciência, eles são classificados como frutos. Por que eles recebem essa classificação?",
+        options: [
+          "a. Porque crescem sempre debaixo da terra como as raízes.",
+          "b. Porque têm sabor obrigatoriamente doce ou azedo.",
+          "c. Porque são ricos em proteínas como as carnes.",
+          "d. Porque são formados a partir das folhas da planta.",
+          "e. Porque contêm as sementes e protegem-nas após a polinização da flor."
+        ],
+        correct: 4,
+        feedback: "Correto! Letra <strong>e</strong>. Os frutos (como tomate, abóbora, pepino, goiaba e pêssego) contêm as sementes e crescem a partir de uma parte da flor (o ovário) após a polinização."
+      },
+      {
+        question: "19. Um prato típico brasileiro combina arroz e feijão, acompanhado às vezes de lentilha ou grão-de-bico. De acordo com o livro, esses alimentos são exemplos de sementes que se destacam por serem ricos em:",
+        options: [
+          "a. gorduras saturadas e açúcar.",
+          "b. proteínas e fibras.",
+          "c. apenas água e sódio.",
+          "d. vitaminas exclusivas de folhas.",
+          "e. cálcio e gordura animal."
+        ],
+        correct: 1,
+        feedback: "Correto! Letra <strong>b</strong>. Feijão, lentilha, grão-de-bico e arroz são exemplos de sementes comestíveis, ricas em proteínas e fibras."
+      },
+      {
+        question: "20. Na seção 'Gotinhas de Saber', o livro explica a diferença entre 'fruta' e 'fruto'. Qual alternativa apresenta corretamente essa distinção?",
+        options: [
+          "a. Fruta é o termo científico e fruto é usado apenas para alimentos doces.",
+          "b. Não existe nenhuma diferença entre os dois termos na ciência ou no dia a dia.",
+          "c. Fruto é apenas a semente, enquanto fruta é a raiz da planta.",
+          "d. Fruto é o termo científico (parte da flor que protege as sementes); fruta é o termo popular para frutos doces ou azedos.",
+          "e. Fruta é todo vegetal verde, e fruto é apenas o tomate."
+        ],
+        correct: 3,
+        feedback: "Correto! Letra <strong>d</strong>. Para os cientistas, o fruto cresce do ovário da flor após a polinização e protege as sementes. Já 'fruta' é o nome popular dado aos frutos doces ou azedos que comemos, como abacate, banana e laranja."
+      },
+      {
+        question: "21. Observando o esquema de uma flor em corte na página 145, o livro chama a atenção para uma curiosidade sobre a maçã. O que o esquema revela?",
+        options: [
+          "a. A parte que comemos da maçã não é considerada fruto pelos cientistas, pois o fruto está na região interna junto às sementes.",
+          "b. A maçã não possui sementes em seu interior.",
+          "c. A maçã cresce a partir da raiz da macieira.",
+          "d. O ovário da flor desaparece antes da formação da maçã.",
+          "e. A maçã é classificada cientificamente como um caule."
+        ],
+        correct: 0,
+        feedback: "Correto! Letra <strong>a</strong>. A legenda da imagem explica que o fruto está na região interna (relacionado ao ovário e às sementes), e que a parte carnosa que comemos da maçã não é considerada fruto."
+      },
+      {
+        question: "22. Por que nem todos os frutos são chamados de frutas pelas pessoas no dia a dia, como acontece com o tomate?",
+        options: [
+          "a. Porque o tomate não tem sementes.",
+          "b. Porque o tomate é uma folha modificada.",
+          "c. Porque os cientistas e o público geral podem classificá-los de maneiras diferentes.",
+          "d. Porque o tomate não passa pela polinização.",
+          "e. Porque apenas alimentos cozidos são chamados de frutos."
+        ],
+        correct: 2,
+        feedback: "Correto! Letra <strong>c</strong>. Isso acontece porque os cientistas classificam o fruto pela sua origem botânica (estrutura da flor com sementes), enquanto o público geral costuma chamar de fruta apenas os de sabor doce ou azedo."
+      },
+      {
+        question: "23. Para ter uma vida melhor e mais longa, o livro destaca a importância da variedade alimentar. Por que é essencial incluir diferentes grupos de alimentos nas refeições?",
+        options: [
+          "a. Para comer a maior quantidade possível de doces e frituras.",
+          "b. Porque assim são fornecidos diferentes nutrientes ao organismo, garantindo tudo o que ele precisa para se manter saudável.",
+          "c. Para substituir o consumo de água durante o dia.",
+          "d. Porque apenas um tipo de planta fornece todos os nutrientes existentes.",
+          "e. Para diminuir a frequência das refeições para apenas uma vez ao dia."
+        ],
+        correct: 1,
+        feedback: "Correto! Letra <strong>b</strong>. Cada alimento (e cada parte da planta) oferece nutrientes específicos ou em diferentes quantidades. Diversificar a alimentação garante que o corpo receba tudo o que necessita."
+      },
+      {
+        question: "24. Na tirinha de Armandinho, o personagem começa citando 'feijão, arroz e batata' e depois acrescenta vários vegetais como abóbora, brócolis, berinjela e lentilha. O que essa cena ilustra sobre a alimentação?",
+        options: [
+          "a. Que devemos comer apenas batata e arroz todos os dias.",
+          "b. Que crianças não devem comer grão-de-bico nem lentilha.",
+          "c. Que a grama faz parte da alimentação humana saudável.",
+          "d. Que devemos evitar frutas e hortaliças no almoço.",
+          "e. A importância de variar o prato com diferentes vegetais e grupos alimentares."
+        ],
+        correct: 4,
+        feedback: "Correto! Letra <strong>e</strong>. A tirinha reforça o tema da página: a variedade de alimentos (hortaliças, leguminosas, grãos) é importante para uma vida saudável."
+      },
+      {
+        question: "25. Qual das combinações abaixo representa uma recomendação do livro para diversificar as refeições de forma saudável?",
+        options: [
+          "a. Biscoitos recheados, refrigerantes e batata frita.",
+          "b. Apenas carnes gordurosas e alimentos ricos em sódio.",
+          "c. Somente sucos industrializados e pães brancos.",
+          "d. Frutas, hortaliças, pães e arroz integrais, feijão, carne sem gordura e castanhas.",
+          "e. Exclusivamente raízes cozidas sem nenhum outro acompanhamento."
+        ],
+        correct: 3,
+        feedback: "Correto! Letra <strong>d</strong>. O livro recomenda incluir em todas as refeições alimentos de diferentes grupos, como frutas, hortaliças, pães e arroz integrais, feijão, carne sem gordura e castanhas."
+      },
+      {
+        question: "26. Júlia costuma pular o almoço e só comer à noite, quando já está com muita fome. Segundo o livro, qual é a desvantagem de não se alimentar em horários regulares?",
+        options: [
+          "a. O metabolismo fica muito mais rápido e saudável.",
+          "b. Ao ficar com muita fome, é provável que a pessoa coma em excesso ou escolha alimentos não saudáveis, como biscoitos.",
+          "c. O corpo passa a produzir suas próprias vitaminas sem precisar de comida.",
+          "d. A digestão fica mais fácil quando se come apenas uma vez ao dia.",
+          "e. Aumenta a sensação de saciedade durante toda a tarde."
+        ],
+        correct: 1,
+        feedback: "Correto! Letra <strong>b</strong>. Alimentar-se em horários regulares ajuda o metabolismo. Em contrapartida, ficar com muita fome leva ao consumo excessivo de comida ou à escolha de alimentos não saudáveis."
+      },
+      {
+        question: "27. De acordo com o livro, qual é a frequência ideal de refeições recomendada ao longo do dia para manter o metabolismo equilibrado?",
+        options: [
+          "a. Comer de 5 a 6 vezes ao dia, incluindo café da manhã, almoço, jantar e lanches intermediários.",
+          "b. Fazer apenas 1 refeição grande no final da noite.",
+          "c. Comer somente 2 vezes ao dia, sem lanches intermediários.",
+          "d. Comer a cada 15 minutos durante todo o dia.",
+          "e. Ficar em jejum completo durante a manhã e a tarde."
+        ],
+        correct: 0,
+        feedback: "Correto! Letra <strong>a</strong>. A frequência ideal recomendada é comer de 5 a 6 vezes ao dia, incluindo café da manhã, almoço, jantar e lanches intermediários."
+      },
+      {
+        question: "28. Além de escolher alimentos variados, o livro alerta sobre substâncias que devem ser evitadas em excesso na dieta. O consumo excessivo de gorduras saturadas e sódio está associado ao risco de:",
+        options: [
+          "a. melhora imediata na absorção de sais minerais.",
+          "b. aumento da fertilidade do solo.",
+          "c. redução da necessidade de beber água.",
+          "d. fortalecimento natural dos dentes.",
+          "e. doenças como diabetes e problemas que afetam o coração."
+        ],
+        correct: 4,
+        feedback: "Correto! Letra <strong>e</strong>. O livro alerta que o consumo excessivo de gorduras saturadas e sódio está associado a doenças como diabetes e aquelas que afetam o sistema cardiovascular."
+      },
+      {
+        question: "29. Na folha de revisão escrita à mão ('Estude!'), há uma pergunta sobre a importância de mastigar adequadamente os alimentos. Qual é o principal benefício desse hábito?",
+        options: [
+          "a. Faz com que a pessoa sinta mais fome logo após comer.",
+          "b. Substitui a necessidade de beber água durante o dia.",
+          "c. Facilita a digestão e aumenta a sensação de saciedade.",
+          "d. Impede que os nutrientes sejam absorvidos pelo organismo.",
+          "e. Aumenta a temperatura corporal rapidamente."
+        ],
+        correct: 2,
+        feedback: "Correto! Letra <strong>c</strong>. Conforme anotado na folha de revisão, mastigar adequadamente os alimentos é um hábito que facilita a digestão e aumenta a sensação de saciedade."
+      },
+      {
+        question: "30. Também na folha de revisão, o segundo desafio pergunta por que devemos ingerir bastante água ao dia. Qual resposta explica corretamente essa importância?",
+        options: [
+          "a. Porque a água substitui todas as proteínas e fibras dos alimentos.",
+          "b. Porque a água serve apenas para molhar a comida na boca.",
+          "c. Porque a água impede a digestão de frutas e verduras.",
+          "d. Porque a água regula a temperatura corporal e ajuda na eliminação de toxinas.",
+          "e. Porque a água aumenta o consumo de sódio no organismo."
+        ],
+        correct: 3,
+        feedback: "Correto! Letra <strong>d</strong>. Conforme a folha de revisão, devemos ingerir bastante água ao dia porque ela regula a temperatura corporal e ajuda na eliminação de toxinas."
+      }
+    ];
+
+    let currentIndex = 0;
+    let userSelections = Array(questions.length).fill(null);
+    let checkedQuestions = Array(questions.length).fill(false);
+
+    const introScreen = document.getElementById("intro-screen");
+    const startBtn = document.getElementById("start-btn");
+    const quizBadges = document.getElementById("quiz-badges");
+    const questionNav = document.getElementById("question-nav");
+    const questionArea = document.getElementById("question-area");
+    const feedbackBox = document.getElementById("feedback-box");
+    const prevBtn = document.getElementById("prev-btn");
+    const checkBtn = document.getElementById("check-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const progressBadge = document.getElementById("progress-badge");
+    const scoreBadge = document.getElementById("score-badge");
+    const quizContainer = document.getElementById("quiz-container");
+    const resultScreen = document.getElementById("result-screen");
+    const finalScoreText = document.getElementById("final-score-text");
+    const finalMessage = document.getElementById("final-message");
+    const restartBtn = document.getElementById("restart-btn");
+
+    startBtn.addEventListener("click", () => {
+      introScreen.classList.add("hidden");
+      quizBadges.classList.remove("hidden");
+      questionNav.classList.remove("hidden");
+      quizContainer.classList.remove("hidden");
+      renderQuestion();
+    });
+
+    function calculateScore() {
+      let correctCount = 0;
+      for (let i = 0; i < questions.length; i++) {
+        if (checkedQuestions[i] && userSelections[i] === questions[i].correct) {
+          correctCount++;
+        }
+      }
+      return (correctCount / questions.length) * 10;
+    }
+
+    function updateScoreBadge() {
+      const score = calculateScore();
+      scoreBadge.textContent = `Nota: ${score.toFixed(1)} / 10`;
+    }
+
+    function renderNav() {
+      questionNav.innerHTML = "";
+      questions.forEach((_, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = idx + 1;
+        btn.onclick = () => {
+          currentIndex = idx;
+          renderQuestion();
+        };
+
+        let classes = "w-7 h-7 rounded-full text-xs font-bold border transition cursor-pointer flex items-center justify-center ";
+
+        if (idx === currentIndex) {
+          classes += "bg-[#38bdf8] text-slate-950 border-white scale-110 shadow ";
+        } else if (checkedQuestions[idx]) {
+          if (userSelections[idx] === questions[idx].correct) {
+            classes += "bg-emerald-500/30 text-emerald-200 border-emerald-400 ";
+          } else {
+            classes += "bg-rose-500/30 text-rose-200 border-rose-400 ";
+          }
+        } else if (userSelections[idx] !== null) {
+          classes += "bg-[#0284c7]/40 text-white border-[#38bdf8] ";
+        } else {
+          classes += "bg-slate-800/80 text-[#94a3b8] border-slate-600 hover:border-[#38bdf8] hover:text-white ";
+        }
+
+        btn.className = classes;
+        questionNav.appendChild(btn);
+      });
+    }
+
+    function renderQuestion() {
+      const q = questions[currentIndex];
+      const selectedIdx = userSelections[currentIndex];
+      const isChecked = checkedQuestions[currentIndex];
+
+      progressBadge.textContent = `Questão ${currentIndex + 1} / ${questions.length}`;
+      prevBtn.disabled = currentIndex === 0;
+      checkBtn.disabled = isChecked || selectedIdx === null;
+      nextBtn.textContent = currentIndex === questions.length - 1 ? "Finalizar Quiz →" : "Next →";
+
+      renderNav();
+
+      let html = `<h2 class="text-base sm:text-lg font-bold text-[#f8f9fa] leading-snug">${q.question}</h2>`;
+      html += `<div class="space-y-2.5">`;
+
+      q.options.forEach((opt, idx) => {
+        let btnClasses = "option-btn w-full text-left px-4 py-3 rounded-full border-2 text-sm sm:text-base text-[#f8f9fa] ";
+
+        if (isChecked) {
+          if (idx === q.correct) {
+            btnClasses += "border-emerald-400 bg-emerald-500/20 font-bold ";
+          } else if (idx === selectedIdx && idx !== q.correct) {
+            btnClasses += "border-rose-400 bg-rose-500/20 ";
+          } else {
+            btnClasses += "border-white/20 bg-slate-800/50 opacity-60 ";
+          }
+        } else {
+          if (idx === selectedIdx) {
+            btnClasses += "border-[#38bdf8] bg-[#0284c7]/30 font-semibold cursor-pointer ";
+          } else {
+            btnClasses += "border-white/40 bg-slate-800/80 cursor-pointer ";
+          }
+        }
+
+        html += `
+          <button
+            onclick="selectOption(${idx})"
+            ${isChecked ? "disabled" : ""}
+            class="${btnClasses}"
+          >
+            ${opt}
+          </button>
+        `;
+      });
+
+      html += `</div>`;
+      questionArea.innerHTML = html;
+
+      if (isChecked) {
+        const isCorrect = selectedIdx === q.correct;
+        feedbackBox.className = isCorrect
+          ? "rounded-2xl p-4 border border-emerald-400/60 bg-emerald-950/50 text-sm sm:text-base leading-relaxed text-[#f8f9fa]"
+          : "rounded-2xl p-4 border border-rose-400/60 bg-rose-950/50 text-sm sm:text-base leading-relaxed text-[#f8f9fa]";
+        feedbackBox.innerHTML = q.feedback;
+        feedbackBox.classList.remove("hidden");
+      } else {
+        feedbackBox.classList.add("hidden");
+      }
+
+      updateScoreBadge();
+    }
+
+    window.selectOption = function (idx) {
+      if (checkedQuestions[currentIndex]) return;
+      userSelections[currentIndex] = idx;
+      renderQuestion();
+    };
+
+    checkBtn.addEventListener("click", () => {
+      if (userSelections[currentIndex] === null || checkedQuestions[currentIndex]) return;
+      checkedQuestions[currentIndex] = true;
+      renderQuestion();
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    });
+
+    function showResults() {
+      questionNav.classList.add("hidden");
+      quizContainer.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+      const finalGrade = calculateScore();
+      finalScoreText.textContent = `${finalGrade.toFixed(1)} / 10.0`;
+
+      if (finalGrade >= 8) {
+        finalMessage.textContent = "Excelente desempenho! Você domina muito bem o conteúdo sobre solo, agricultura, partes das plantas e hábitos saudáveis.";
+      } else if (finalGrade >= 6) {
+        finalMessage.textContent = "Bom trabalho! Vale a pena revisar alguns detalhes sobre os cuidados com o solo e a diferença entre fruta e fruto.";
+      } else {
+        finalMessage.textContent = "Bom esforço! Releia as páginas do livro e a folha de revisão e tente novamente para fixar ainda melhor o conteúdo.";
+      }
+    }
+
+    restartBtn.addEventListener("click", () => {
+      currentIndex = 0;
+      userSelections = Array(questions.length).fill(null);
+      checkedQuestions = Array(questions.length).fill(false);
+      resultScreen.classList.add("hidden");
+      questionNav.classList.remove("hidden");
+      quizContainer.classList.remove("hidden");
+      renderQuestion();
+    });
+  </script>
+</body>
+</html>
